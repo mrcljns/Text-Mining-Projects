@@ -49,8 +49,8 @@ for link in tqdm(links_list, position=1, desc="Gather speech transcripts"):
 
     html = request.urlopen(link)
     bs = BS(html.read(), "html.parser")
-    speech_text = bs.find("div", {"id": "divContentArea"}).find_all("p")
-    text_list.append("\n".join([txt.get_text() for txt in speech_text]))
+    speech_text = bs.find("div", {"id": "divContentArea"}).find_all(string=True)
+    text_list.append("".join(speech_text))
 
 speech_df = pd.DataFrame(list(zip(titles_list, dates_list, text_list)), columns=["Title", "Date", "Text"])
 speech_df.to_csv("Erdogan_speeches.csv", index=False)
