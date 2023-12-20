@@ -4,20 +4,19 @@ import pandas as pd
 from tqdm import tqdm
 # Libraries for obtaining translation
 import translators as ts
-# from deep_translator import GoogleTranslator
+from deep_translator import GoogleTranslator
+import time
+
+translator = GoogleTranslator(source='tr', target='en')
 
 # Function for translating the text
 def get_translation(text):
-    # In case of error, return nan
-    try:
-        # Translate by paragraph
-        pars = text.split("\n")
-        translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
-        # translated_text = [GoogleTranslator(source='tr', target='en').translate(par) for par in pars]
+    # Translate by paragraph
+    pars = text.split("\n")
+    # translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
+    translated_text = translator.translate_batch(pars)
 
-        return "\n".join(translated_text)
-    except:
-        return np.nan
+    return "\n".join(translated_text)
     
 parser = argparse.ArgumentParser()
 parser.add_argument("year", help="translate only speeches from the given year", type=int, nargs="?")
@@ -38,8 +37,7 @@ if args.limit:
     speech_df = speech_df.iloc[:args.limit].reset_index(drop=True)
 
 # Translate title
-speech_df["Translated_title"] = speech_df["Title"].progress_map(lambda x: ts.translate_text(query_text=x, from_language="tr", to_language="en", translator="bing"))
-# speech_df["Translated_title"] = speech_df["Title"].progress_map(lambda x: GoogleTranslator(source='tr', target='en').translate(x))
+speech_df["Translated_title"] = speech_df["Title"].progress_map(lambda x: get_translation(x))
 
 # Translate transcript of speech
 speech_df["Translated_text"] = speech_df["Text"].progress_map(lambda x: get_translation(x))
