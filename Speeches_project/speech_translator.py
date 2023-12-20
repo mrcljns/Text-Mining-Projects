@@ -20,8 +20,8 @@ def get_translation(text):
         return np.nan
     
 parser = argparse.ArgumentParser()
-parser.add_argument("year", help="translate only speeches from the given year", type=int)
-parser.add_argument("limit", help="translate only n-number of speeches until the limit", type=int)
+parser.add_argument("year", help="translate only speeches from the given year", type=int, nargs="?")
+parser.add_argument("limit", help="translate only n-number of speeches until the limit", type=int, nargs="?")
 args = parser.parse_args()
 
 # See the progress bar
@@ -31,7 +31,7 @@ tqdm.pandas()
 speech_df = pd.read_csv("Erdogan_speeches.csv")
 
 if args.year:
-    speech_df.Date = pd.to_datetime(speech_df.Date, format="%d.%m.%Y")
+    speech_df.Date = pd.to_datetime(speech_df.Date, format="%Y-%m-%d")
     speech_df = speech_df.loc[speech_df.Date.dt.year == args.year].reset_index(drop=True)
 
 if args.limit:
