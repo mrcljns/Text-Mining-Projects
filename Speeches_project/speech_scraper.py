@@ -29,7 +29,7 @@ text_list = []
 for page in tqdm(site_pages, position=0, desc="Gather speech links"):
 
     # Wait some time before the next request
-    time.sleep(randint(1,3))
+    time.sleep(1)
 
     html = request.urlopen(page)
     bs = BS(html.read(), "html.parser")
@@ -45,7 +45,7 @@ for page in tqdm(site_pages, position=0, desc="Gather speech links"):
 for link in tqdm(links_list, position=1, desc="Gather speech transcripts"):
 
     # Wait some time before the next requests
-    time.sleep(randint(1,3))
+    time.sleep(1)
 
     html = request.urlopen(link)
     bs = BS(html.read(), "html.parser")

@@ -2,8 +2,9 @@ import argparse
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-# Library for obtaining translation
+# Libraries for obtaining translation
 import translators as ts
+# from deep_translator import GoogleTranslator
 
 # Function for translating the text
 def get_translation(text):
@@ -12,6 +13,8 @@ def get_translation(text):
         # Translate by paragraph
         pars = text.split("\n")
         translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
+        # translated_text = [GoogleTranslator(source='tr', target='en').translate(par) for par in pars]
+
         return "\n".join(translated_text)
     except:
         return np.nan
@@ -36,6 +39,7 @@ if args.limit:
 
 # Translate title
 speech_df["Translated_title"] = speech_df["Title"].progress_map(lambda x: ts.translate_text(query_text=x, from_language="tr", to_language="en", translator="bing"))
+# speech_df["Translated_title"] = speech_df["Title"].progress_map(lambda x: GoogleTranslator(source='tr', target='en').translate(x))
 
 # Translate transcript of speech
 speech_df["Translated_text"] = speech_df["Text"].progress_map(lambda x: get_translation(x))
