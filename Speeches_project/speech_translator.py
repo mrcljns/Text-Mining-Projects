@@ -11,12 +11,15 @@ translator = GoogleTranslator(source='tr', target='en')
 
 # Function for translating the text
 def get_translation(text):
-    # Translate by paragraph
-    pars = text.split("\n")
-    # translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
-    translated_text = translator.translate_batch(pars)
-
-    return "\n".join(translated_text)
+    try:
+        # Translate by paragraph
+        pars = text.split("\n")
+        # translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
+        translated_text = translator.translate_batch(pars)
+        translated_text = [x for x in translated_text if x is not None]
+        return "\n".join(translated_text)
+    except:
+        return np.nan
     
 parser = argparse.ArgumentParser()
 parser.add_argument("year", help="translate only speeches from the given year", type=int, nargs="?")
@@ -27,7 +30,7 @@ args = parser.parse_args()
 tqdm.pandas()
 
 # Load speeches
-speech_df = pd.read_csv("Erdogan_speeches.csv")
+speech_df = pd.read_csv("Erdogan_selected_speeches.csv")
 
 if args.year:
     speech_df.Date = pd.to_datetime(speech_df.Date, format="%Y-%m-%d")
