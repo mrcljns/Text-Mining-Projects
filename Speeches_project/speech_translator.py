@@ -48,7 +48,7 @@ speech_df["Translated_text"] = speech_df["Text"].progress_map(lambda x: get_tran
 speech_df = speech_df.drop(["Title", "Text"], axis=1)
 
 # Reorder the columns
-speech_df = speech_df[["Translated_title", "Date", "Translated_text"]]
+speech_df = speech_df[["Translated_title", "Date", "Translated_text", "Event_date", "Detail", "When"]]
 
 # Write results to file
 speech_df.to_csv("Erdogan_translated_speeches.csv", index=False)
