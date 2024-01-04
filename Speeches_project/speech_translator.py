@@ -1,11 +1,10 @@
 import argparse
 import numpy as np
 import pandas as pd
+import re
 from tqdm import tqdm
-# Libraries for obtaining translation
-import translators as ts
+# Library for obtaining translation
 from deep_translator import GoogleTranslator
-import time
 
 translator = GoogleTranslator(source='tr', target='en')
 
@@ -13,11 +12,12 @@ translator = GoogleTranslator(source='tr', target='en')
 def get_translation(text):
     try:
         # Translate by paragraph
-        pars = text.split("\n")
+        pars = re.split(r"\. *\n", text)
+        pars = [re.sub(r"\r\n", " ", par.strip()) for par in pars]
         # translated_text = [ts.translate_text(query_text=par, from_language="tr", to_language="en", translator="bing") for par in pars]
         translated_text = translator.translate_batch(pars)
         translated_text = [x for x in translated_text if x is not None]
-        return "\n".join(translated_text)
+        return ".\n ".join(translated_text)
     except:
         return np.nan
     
