@@ -54,4 +54,4 @@ for link in tqdm(links_list, position=1, desc="Gather speech transcripts"):
 
 speech_df = pd.DataFrame(list(zip(titles_list, dates_list, text_list)), columns=["Title", "Date", "Text"])
 speech_df.Date = pd.to_datetime(speech_df.Date, format="%d.%m.%Y")
-speech_df.to_csv("Erdogan_speeches.csv", index=False, date_format="%Y-%m-%d")
+speech_df.to_csv("data/Erdogan_speeches.csv", index=False, date_format="%Y-%m-%d")
